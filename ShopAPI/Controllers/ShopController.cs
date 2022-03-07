@@ -24,7 +24,9 @@ namespace ShopAPI.Controllers
         {
             var shops = _dbContext.Shops.ToList();
 
-            return Ok(shops);
+            var shopsDto = _mapper.Map<List<ShopDto>>(shops);
+
+            return Ok(shopsDto);
         }
 
         [HttpGet("{id}")]
