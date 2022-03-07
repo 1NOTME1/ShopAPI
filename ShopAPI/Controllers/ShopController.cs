@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using ShopAPI.Entities;
+using ShopAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,10 +11,12 @@ namespace ShopAPI.Controllers
     public class ShopController : ControllerBase
     {
         private readonly ShopDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public ShopController(ShopDbContext dbContext)
+        public ShopController(ShopDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -32,7 +36,7 @@ namespace ShopAPI.Controllers
             {
                 return NotFound();
             }
-
+           
             return Ok(shop);
         }
     }
