@@ -6,12 +6,8 @@ namespace ShopAPI
 {
     public class ShopMappingProfile : Profile
     {
-        private readonly IMapper _mapper;
-
-        public ShopMappingProfile(IMapper mapper)
+        public ShopMappingProfile()
         {
-            _mapper = mapper;
-
             CreateMap<Shop, ShopDto>()
                 .ForMember(s => s.City, c => c.MapFrom(s => s.Address.City))
                 .ForMember(s => s.Street, c => c.MapFrom(s => s.Address.Street))
@@ -19,8 +15,8 @@ namespace ShopAPI
 
             CreateMap<Product, ProductDto>();
         }
-        
-       
-        
+
+
+
     }
 }
