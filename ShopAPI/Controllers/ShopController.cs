@@ -20,7 +20,7 @@ namespace ShopAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Shop>> GetAll()
+        public ActionResult<IEnumerable<ShopDto>> GetAll()
         {
             var shops = _dbContext.Shops.ToList();
 
@@ -30,7 +30,7 @@ namespace ShopAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Shop> GetById([FromRoute] int id)
+        public ActionResult<ShopDto> GetById([FromRoute] int id)
         {
             var shop = _dbContext.Shops.FirstOrDefault(s => s.Id == id);
 
@@ -38,8 +38,9 @@ namespace ShopAPI.Controllers
             {
                 return NotFound();
             }
-           
-            return Ok(shop);
+           var shopDto = _mapper.Map<ShopDto>(shop);
+
+            return Ok(shopDto);
         }
     }
 }
