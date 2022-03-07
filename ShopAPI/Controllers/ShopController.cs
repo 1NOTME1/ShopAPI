@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShopAPI.Entities;
+using ShopAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,31 +12,44 @@ namespace ShopAPI.Controllers
     public class ShopController : ControllerBase
     {
         private readonly ShopDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public ShopController(ShopDbContext dbContext)
+        public ShopController(ShopDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Shop>> GetAll()
+        public ActionResult<IEnumerable<ShopDto>> GetAll()
         {
-            var shops = _dbContext.Shops.ToList();
+            var shops = _dbContext
+                .Shops
+                .Include(s => s.Address)
+                .Include(s => s.Product)
+                .ToList();
 
-            return Ok(shops);
+            var shopsDto = _mapper.Map<List<ShopDto>>(shops);
+
+            return Ok(shopsDto);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Shop> GetById([FromRoute] int id)
+        public ActionResult<ShopDto> GetById([FromRoute] int id)
         {
-            var shop = _dbContext.Shops.FirstOrDefault(s => s.Id == id);
+            var shop = _dbContext
+                .Shops
+                .Include(s => s.Address)
+                .Include(s => s.Product)
+                .FirstOrDefault(s => s.Id == id);
 
             if(shop is null)
             {
                 return NotFound();
             }
+           var shopDto = _mapper.Map<ShopDto>(shop);
 
-            return Ok(shop);
+            return Ok(shopDto);
         }
     }
 }
