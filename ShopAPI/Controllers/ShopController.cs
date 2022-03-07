@@ -22,7 +22,18 @@ namespace ShopAPI.Controllers
 
             return Ok(shops);
         }
-        
-        
+
+        [HttpGet("{id}")]
+        public ActionResult<Shop> GetById([FromRoute] int id)
+        {
+            var shop = _dbContext.Shops.FirstOrDefault(s => s.Id == id);
+
+            if(shop is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(shop);
+        }
     }
 }
