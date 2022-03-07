@@ -13,6 +13,6 @@ namespace ShopAPI.Models
         public string City { get; set; }
         public string Street { get; set; }
         public string PostalCode { get; set; }
-        public List<Product> Products { get; set; }
+        public List<ProductDto> Product { get; set; }
     }
 }
