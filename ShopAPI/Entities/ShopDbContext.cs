@@ -4,7 +4,7 @@ using System;
 
 namespace ShopAPI.Entities
 {
-    public class ShopDbContext : DbContext
+    public class ShopDbContext : DbContext //klasa reprezentuje polaczenie do bazy danych poprzez EF
     {
         private string _connectionString = "Server=NOTME;Database=ShopDb;Trusted_Connection=True;";
 
