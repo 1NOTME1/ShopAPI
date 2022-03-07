@@ -20,6 +20,18 @@ namespace ShopAPI.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost]
+        public ActionResult CreateShop([FromBody]CreateShopDto dto)
+        {
+            var shop = _mapper.Map<Shop>(dto);
+
+            _dbContext.Shops.Add(shop);
+            _dbContext.SaveChanges();
+
+            return Created($"api/shop/{shop.Id}", null);
+        }
+            
+
         [HttpGet]
         public ActionResult<IEnumerable<ShopDto>> GetAll()
         {
