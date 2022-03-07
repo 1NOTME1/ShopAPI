@@ -25,6 +25,16 @@ namespace ShopAPI.Entities
                 .Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            modelBuilder.Entity<Address>()
+                .Property(a => a.City)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<Address>()
+                .Property(a => a.Street)
+                .IsRequired()
+                .HasMaxLength(50);
         }
 
         //funkcja OnConfiguring() pozwala na konfiguracje polaczenia do bazy danych i sprecyzowanie jakiego typu bazy chce uzyc
