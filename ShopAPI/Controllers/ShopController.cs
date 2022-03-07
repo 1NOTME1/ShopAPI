@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShopAPI.Entities;
 using ShopAPI.Models;
 using System.Collections.Generic;
@@ -22,7 +23,11 @@ namespace ShopAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ShopDto>> GetAll()
         {
-            var shops = _dbContext.Shops.ToList();
+            var shops = _dbContext
+                .Shops
+                .Include(s => s.Address)
+                .Include(s => s.Product)
+                .ToList();
 
             var shopsDto = _mapper.Map<List<ShopDto>>(shops);
 
@@ -32,7 +37,11 @@ namespace ShopAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<ShopDto> GetById([FromRoute] int id)
         {
-            var shop = _dbContext.Shops.FirstOrDefault(s => s.Id == id);
+            var shop = _dbContext
+                .Shops
+                .Include(s => s.Address)
+                .Include(s => s.Product)
+                .FirstOrDefault(s => s.Id == id);
 
             if(shop is null)
             {
