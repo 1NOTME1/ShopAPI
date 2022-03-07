@@ -14,6 +14,11 @@ namespace ShopAPI
                 .ForMember(s => s.PostalCode, c => c.MapFrom(s => s.Address.PostalCode));
 
             CreateMap<Product, ProductDto>();
+
+            CreateMap<CreateShopDto, Shop>()
+            .ForMember(s => s.Address, c => c.MapFrom(dto => new Address()
+            { City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
+
         }
 
 
