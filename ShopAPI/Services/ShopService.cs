@@ -1,10 +1,21 @@
-﻿using ShopAPI.Models;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using ShopAPI.Entities;
+using ShopAPI.Models;
+using System.Linq;
 
 namespace ShopAPI.Services
 {
     public class ShopService
     {
-       
+        private readonly ShopDbContext _dbContext;
+        private readonly IMapper _mapper;
+
+        public ShopService(ShopDbContext dbContext, IMapper mapper)
+        {
+            _dbContext = dbContext;
+            _mapper = mapper;
+        }
         public ShopDto GetById(int id)
         {
             var shop = _dbContext
