@@ -45,7 +45,15 @@ namespace ShopAPI.Services
             return shopsDto;
         }
 
-        
+        public int Create(CreateShopDto dto)
+        {
+            var shop = _mapper.Map<Shop>(dto);
+
+            _dbContext.Shops.Add(shop);
+            _dbContext.SaveChanges();
+
+            return shop.Id;
+        }
 
     }
 }
