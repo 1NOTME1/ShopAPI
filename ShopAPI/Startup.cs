@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ShopAPI.Entities;
+using ShopAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace ShopAPI
             services.AddDbContext<ShopDbContext>();
             services.AddScoped<ShopSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
+            services.AddScoped<IShopService, ShopService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
