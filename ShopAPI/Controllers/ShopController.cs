@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopAPI.Entities;
 using ShopAPI.Models;
+using ShopAPI.Services;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,42 +12,31 @@ namespace ShopAPI.Controllers
     [Route("api/shop")]
     public class ShopController : ControllerBase
     {
-        private readonly ShopDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IShopService _shopService;
 
-        public ShopController(ShopDbContext dbContext, IMapper mapper)
+        public ShopController(IShopService shopService)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _shopService = shopService;
         }
 
         [HttpPost]
-        public ActionResult CreateShop([FromBody]CreateShopDto dto)
+        public ActionResult CreateShop([FromBody] CreateShopDto dto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var shop = _mapper.Map<Shop>(dto);
+            var id = _shopService.Create(dto);
 
-            _dbContext.Shops.Add(shop);
-            _dbContext.SaveChanges();
-
-            return Created($"api/shop/{shop.Id}", null);
+            return Created($"api/shop/{id}", null);
         }
-            
+
 
         [HttpGet]
         public ActionResult<IEnumerable<ShopDto>> GetAll()
         {
-            var shops = _dbContext
-                .Shops
-                .Include(s => s.Address)
-                .Include(s => s.Product)
-                .ToList();
-
-            var shopsDto = _mapper.Map<List<ShopDto>>(shops);
+            var shopsDto = _shopService.GetAll();
 
             return Ok(shopsDto);
         }
@@ -54,19 +44,14 @@ namespace ShopAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<ShopDto> GetById([FromRoute] int id)
         {
-            var shop = _dbContext
-                .Shops
-                .Include(s => s.Address)
-                .Include(s => s.Product)
-                .FirstOrDefault(s => s.Id == id);
+            var shop = _shopService.GetById(id);
 
             if(shop is null)
             {
                 return NotFound();
             }
-           var shopDto = _mapper.Map<ShopDto>(shop);
 
-            return Ok(shopDto);
+            return Ok(shop);
         }
     }
 }

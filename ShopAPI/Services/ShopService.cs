@@ -24,6 +24,7 @@ namespace ShopAPI.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
+
         public ShopDto GetById(int id)
         {
             var shop = _dbContext
