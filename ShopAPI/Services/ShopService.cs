@@ -7,7 +7,14 @@ using System.Linq;
 
 namespace ShopAPI.Services
 {
-    public class ShopService
+    public interface IShopService
+    {
+        int Create(CreateShopDto dto);
+        IEnumerable<ShopDto> GetAll();
+        ShopDto GetById(int id);
+    }
+
+    public class ShopService : IShopService
     {
         private readonly ShopDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -29,7 +36,7 @@ namespace ShopAPI.Services
 
             var shopDto = _mapper.Map<ShopDto>(shop);
 
-            return shopDto;    
+            return shopDto;
         }
 
         public IEnumerable<ShopDto> GetAll()
