@@ -23,6 +23,11 @@ namespace ShopAPI.Controllers
         [HttpPost]
         public ActionResult CreateShop([FromBody]CreateShopDto dto)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var shop = _mapper.Map<Shop>(dto);
 
             _dbContext.Shops.Add(shop);
