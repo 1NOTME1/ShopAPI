@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShopAPI.Entities;
 using ShopAPI.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ShopAPI.Services
@@ -31,6 +32,20 @@ namespace ShopAPI.Services
             return shopDto;    
         }
 
+        public IEnumerable<ShopDto> GetAll()
+        {
+            var shops = _dbContext
+                .Shops
+                .Include(s => s.Address)
+                .Include(s => s.Product)
+                .ToList();
+
+            var shopsDto = _mapper.Map<List<ShopDto>>(shops);
+
+            return shopsDto;
+        }
+
+        
 
     }
 }
