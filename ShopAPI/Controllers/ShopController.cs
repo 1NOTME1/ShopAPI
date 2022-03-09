@@ -19,6 +19,19 @@ namespace ShopAPI.Controllers
             _shopService = shopService;
         }
 
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            var isDeleted = _shopService.Delete(id);
+
+            if (isDeleted)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
+
         [HttpPost]
         public ActionResult CreateShop([FromBody] CreateShopDto dto)
         {
@@ -46,7 +59,7 @@ namespace ShopAPI.Controllers
         {
             var shop = _shopService.GetById(id);
 
-            if(shop is null)
+            if (shop is null)
             {
                 return NotFound();
             }
