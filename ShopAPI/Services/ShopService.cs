@@ -9,6 +9,7 @@ namespace ShopAPI.Services
 {
     public interface IShopService
     {
+        public bool Delete(int id);
         int Create(CreateShopDto dto);
         IEnumerable<ShopDto> GetAll();
         ShopDto GetById(int id);
@@ -23,6 +24,20 @@ namespace ShopAPI.Services
         {
             _dbContext = dbContext;
             _mapper = mapper;
+        }
+
+        public bool Delete(int id)
+        {
+            var shop = _dbContext
+                .Shops
+                .FirstOrDefault(x => x.Id == id);
+
+            if(shop is null) return false;
+
+            _dbContext.Shops.Remove(shop);
+            _dbContext.SaveChanges();
+
+            return true;
         }
 
         public ShopDto GetById(int id)
