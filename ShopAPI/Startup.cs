@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ShopAPI.Entities;
+using ShopAPI.Middleware;
 using ShopAPI.Services;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace ShopAPI
             services.AddScoped<ShopSeeder>();
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<IShopService, ShopService>();
+            services.AddScoped<ErrorHandlingMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +46,7 @@ namespace ShopAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
