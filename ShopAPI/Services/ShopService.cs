@@ -13,6 +13,7 @@ namespace ShopAPI.Services
         int Create(CreateShopDto dto);
         IEnumerable<ShopDto> GetAll();
         ShopDto GetById(int id);
+        public bool Update(int id, UpdateShopDto dto);
     }
 
     public class ShopService : IShopService
@@ -25,14 +26,29 @@ namespace ShopAPI.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
+        public bool Update(int id, UpdateShopDto dto)
+        {
+            var shop = _dbContext
+                .Shops
+                .FirstOrDefault(s => s.Id == id);
 
+            if (shop is null) return false;
+
+            shop.Name = dto.Name;
+            shop.Description = dto.Description;
+            shop.HasDelivery = dto.HasDelivery;
+
+            _dbContext.SaveChanges();
+
+            return true;
+        }
         public bool Delete(int id)
         {
             var shop = _dbContext
                 .Shops
                 .FirstOrDefault(x => x.Id == id);
 
-            if(shop is null) return false;
+            if (shop is null) return false;
 
             _dbContext.Shops.Remove(shop);
             _dbContext.SaveChanges();
