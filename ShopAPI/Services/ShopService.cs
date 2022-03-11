@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ShopAPI.Entities;
 using ShopAPI.Models;
 using System.Collections.Generic;
@@ -20,11 +21,13 @@ namespace ShopAPI.Services
     {
         private readonly ShopDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly ILogger<ShopService> _logger;
 
-        public ShopService(ShopDbContext dbContext, IMapper mapper)
+        public ShopService(ShopDbContext dbContext, IMapper mapper, ILogger<ShopService> logger)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _logger = logger;
         }
         public bool Update(int id, UpdateShopDto dto)
         {
@@ -44,6 +47,8 @@ namespace ShopAPI.Services
         }
         public bool Delete(int id)
         {
+            _logger.LogError($"Shop with id: {id} DELETE actoin invoked");
+
             var shop = _dbContext
                 .Shops
                 .FirstOrDefault(x => x.Id == id);
