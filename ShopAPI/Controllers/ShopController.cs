@@ -10,6 +10,7 @@ using System.Linq;
 namespace ShopAPI.Controllers
 {
     [Route("api/shop")]
+    [ApiController]
     public class ShopController : ControllerBase
     {
         private readonly IShopService _shopService;
@@ -22,12 +23,7 @@ namespace ShopAPI.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            var isDeleted = _shopService.Delete(id);
-
-            if (isDeleted)
-            {
-                return NoContent();
-            }
+            _shopService.Delete(id);
 
             return NotFound();
         }
@@ -35,35 +31,18 @@ namespace ShopAPI.Controllers
         [HttpPut("{id}")]
         public ActionResult Update([FromBody] UpdateShopDto dto, [FromRoute]int id)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-           var IsUpdated = _shopService.Update(id, dto);
-
-            if (!IsUpdated)
-            {
-                return NotFound();
-            }
+           _shopService.Update(id, dto);
 
             return Ok();
-
         }
 
         [HttpPost]
         public ActionResult CreateShop([FromBody] CreateShopDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var id = _shopService.Create(dto);
 
             return Created($"api/shop/{id}", null);
         }
-
 
         [HttpGet]
         public ActionResult<IEnumerable<ShopDto>> GetAll()
@@ -77,11 +56,6 @@ namespace ShopAPI.Controllers
         public ActionResult<ShopDto> GetById([FromRoute] int id)
         {
             var shop = _shopService.GetById(id);
-
-            if (shop is null)
-            {
-                return NotFound();
-            }
 
             return Ok(shop);
         }
