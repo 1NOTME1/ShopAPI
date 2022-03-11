@@ -32,6 +32,25 @@ namespace ShopAPI.Controllers
             return NotFound();
         }
 
+        [HttpPut("{id}")]
+        public ActionResult Update([FromBody] UpdateShopDto dto, [FromRoute]int id)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+           var IsUpdated = _shopService.Update(id, dto);
+
+            if (!IsUpdated)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+
+        }
+
         [HttpPost]
         public ActionResult CreateShop([FromBody] CreateShopDto dto)
         {
